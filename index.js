@@ -63,11 +63,11 @@ function poopAlert() {
             currentlyPooping = 0;
           } else if (poop == -1 && currentlyPooping == 1) {
             currentlyPooping = 0;
-            bot.postMessageToChannel('shhhhtesting', "Someone is done using Bwog to figure out where to poop", params)
+            bot.postMessageToChannel('overseen_overheard', "_Someone is done using Bwog to figure out where to poop_", params)
             console.log("Someone is done using Bwog to figure out where to poop")
           } else if (poop >= 0 && currentlyPooping == 0) {
             currentlyPooping = 1;
-            bot.postMessageToChannel('shhhhtesting', "Someone is using Bwog to figure out where to poop", params)
+            bot.postMessageToChannel('overseen_overheard', "_Someone has finished using Bwog to figure out where to poop_", params)
             console.log("Someone is using Bwog to figure out where to poop")
           }
         }
