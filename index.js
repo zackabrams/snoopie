@@ -58,7 +58,7 @@ function poopAlert() {
           var analData = result.data.rows
           var string = analData.toString()
           console.log(string)
-          var poop = string.search("Poopin' In Pupin")
+          var poop = string.search("Poopin’ In Pupin")
           console.log(poop)
           if (poop == -1 && currentlyPooping == 0) {
             currentlyPooping = 0;
