@@ -6,6 +6,8 @@ var fs = require('fs');
 
 const token1 = process.env.BWOGTOKEN
 console.log(token1);
+console.log(process.env.CLIENT_EMAIL);
+console.log(process.env.PRIVATE_KEY);
 var bot = new SlackBot({
   token: 'token1',
   name: 'poopie'
@@ -39,7 +41,6 @@ function poopAlert() {
     const { google } = require('googleapis')
     const fs = require('fs')
 
-    const key = require('/Users/zackabrams/Downloads/bwogauth.json')
     const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
     const jwt = new google.auth.JWT(
       process.env.CLIENT_EMAIL,
@@ -48,8 +49,6 @@ function poopAlert() {
       scopes
       )
     const view_id = '198211958'
-
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = '/Users/zackabrams/Downloads/bwogauth.json'
 
     jwt.authorize((err, response) => {
       google.analytics('v3').data.realtime.get(
