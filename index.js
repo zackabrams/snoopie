@@ -6,6 +6,8 @@ var fs = require('fs');
 
 const token1 = process.env.BWOGTOKEN
 console.log(token1);
+console.log(process.env.CLIENT_EMAIL);
+console.log(process.env.PRIVATE_KEY);
 var bot = new SlackBot({
   token: token1,
   name: 'poopie'
