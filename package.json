@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fs": "0.0.1-security",
     "git": "^0.1.5",
     "googleapis": "^42.0.0",
     "slackbots": "^1.2.0"
