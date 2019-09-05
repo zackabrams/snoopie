@@ -2,16 +2,13 @@
 var SlackBot = require('slackbots');
 var fs = require('fs');
 require('dotenv').config();
-console.log(process.env);
 
 // create a bot
 
-const token1 = process.env.BWOGTOKEN
-console.log(token1);
-console.log(process.env.CLIENT_EMAIL);
-console.log(process.env.PRIVATE_KEY);
+// const token1 = process.env.BWOGTOKEN
+// console.log(token1);
 var bot = new SlackBot({
-  token: token1,
+  token: process.env.BWOGTOKEN,
   name: 'poopie'
 });
 
@@ -43,14 +40,15 @@ function poopAlert() {
     const { google } = require('googleapis')
     const fs = require('fs')
 
+    const key = require('/Users/zackabrams/Downloads/bwogauth.json')
     const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
-    const jwt = new google.auth.JWT(
-      process.env.CLIENT_EMAIL,
-      null,
-      process.env.PRIVATE_KEY,
-      scopes
-      )
+    const jwt = new google.auth.JWT(key.client_email, null, key.private_key, scopes)
     const view_id = '198211958'
+
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = '/Users/zackabrams/Downloads/bwogauth.json'
+
+    console.log(key.client_email)
+    console.log(key.private_key)
 
     jwt.authorize((err, response) => {
       google.analytics('v3').data.realtime.get(
@@ -71,11 +69,11 @@ function poopAlert() {
             currentlyPooping = 0;
           } else if (poop == -1 && currentlyPooping == 1) {
             currentlyPooping = 0;
-            bot.postMessageToChannel('shhhhtesting', "*Someone is done using Bwog to figure out where to poop*", params)
+            bot.postMessageToChannel('shhhhtesting', "Someone is done using Bwog to figure out where to poop", params)
             console.log("Someone is done using Bwog to figure out where to poop")
           } else if (poop >= 0 && currentlyPooping == 0) {
             currentlyPooping = 1;
-            bot.postMessageToChannel('shhhhtesting', "*Someone is using Bwog to figure out where to poop*", params)
+            bot.postMessageToChannel('shhhhtesting', "Someone is using Bwog to figure out where to poop", params)
             console.log("Someone is using Bwog to figure out where to poop")
           }
         }
