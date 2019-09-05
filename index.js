@@ -44,11 +44,6 @@ function poopAlert() {
     const jwt = new google.auth.JWT(process.env.CLIENT_EMAIL, null, process.env.PRIVATE_KEY, scopes)
     const view_id = '198211958'
 
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = '/Users/zackabrams/Downloads/bwogauth.json'
-
-    console.log(key.client_email)
-    console.log(key.private_key)
-
     jwt.authorize((err, response) => {
       google.analytics('v3').data.realtime.get(
         {
