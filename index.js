@@ -41,13 +41,9 @@ function poopAlert() {
     const { google } = require('googleapis')
     const fs = require('fs')
 
+    const key = require(process.env.GOOGLE_APPLICATION_CREDENTIALS)
     const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
-    const jwt = new google.auth.JWT(
-      process.env.CLIENT_EMAIL,
-      null,
-      process.env.PRIVATE_KEY,
-      scopes
-      )
+    const jwt = new google.auth.JWT(key.client_email, null, key.private_key, scopes)
     const view_id = '198211958'
 
     jwt.authorize((err, response) => {
