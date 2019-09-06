@@ -44,20 +44,21 @@ bot.on('message', function(data) {
         username = obj1.name;
 
         const { google } = require('googleapis')
-        const fs = require('fs')
-        const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
-        const jwt = new google.auth.JWT(process.env.CLIENT_EMAIL, null, process.env.PRIVATE_KEY, scopes)
-        const view_id = '198211958'
+    const fs = require('fs')
 
-        jwt.authorize((err, response) => {
-          google.analytics('v3').data.realtime.get(
-            {
-              auth: jwt,
-              ids: 'ga:' + view_id,
-              metrics: 'rt:activeUsers',
-              dimensions: 'rt:pageTitle'
+    const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
+    const jwt = new google.auth.JWT(process.env.CLIENT_EMAIL, null, process.env.PRIVATE_KEY, scopes)
+    const view_id = '198211958'
 
-            },
+    jwt.authorize((err, response) => {
+      google.analytics('v3').data.realtime.get(
+        {
+          auth: jwt,
+          ids: 'ga:' + view_id,
+          metrics: 'rt:activeUsers',
+          dimensions: 'rt:pageTitle'
+
+        },
             (err, result) => {
               result = result.data.rows.toString()
               var cleanresult = result += ",";
