@@ -5,19 +5,16 @@ require('dotenv').config();
 
 // create a bot
 
-// const token1 = process.env.BWOGTOKEN
-// console.log(token1);
+const token1 = process.env.BWOGTOKEN
 var bot = new SlackBot({
-  token: process.env.BWOGTOKEN,
-  name: 'poopie'
+  token: token1,
+  name: 'snoopie'
 });
-
-var currentlyPooping = 0;
 
 bot.on('start', function() {
     // more information about additional params https://api.slack.com/methods/chat.postMessage
     var params = {
-        icon_emoji: ':poop:',
+        icon_emoji: ':dog:',
         link_names: 'true'
     };
     daataa = bot.getUsers()._value.members
@@ -31,51 +28,46 @@ bot.on('start', function() {
 
 });
 
-function poopAlert() {
+bot.on('message', function(data) {
     var params = {
-        icon_emoji: ':poop:',
+        icon_emoji: ':dog:',
         link_names: 'true'
     };
 
-    const { google } = require('googleapis')
-    const fs = require('fs')
+    if (data.type === 'message' && data.text.includes('.now') || data.text.includes('.realtime') || data.text.includes('.users') || data.text.includes('.live')) {
 
-    const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
-    const jwt = new google.auth.JWT(process.env.CLIENT_EMAIL, null, process.env.PRIVATE_KEY, scopes)
-    const view_id = '198211958'
+        userlist = bot.getUsers();
+        userarray = userlist._value.members;
+        obj1 = userarray.find(o => o.id === data.user);
+        user_name = obj1.profile.first_name;
+        console.log(obj1)
+        username = obj1.name;
 
-    jwt.authorize((err, response) => {
-      google.analytics('v3').data.realtime.get(
-        {
-          auth: jwt,
-          ids: 'ga:' + view_id,
-          metrics: 'rt:activeUsers',
-          dimensions: 'rt:pageTitle'
+        const { google } = require('googleapis')
+        const fs = require('fs')
+        const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
+        const jwt = new google.auth.JWT(process.env.CLIENT_EMAIL, null, process.env.PRIVATE_KEY, scopes)
+        const view_id = '198211958'
 
-        },
-        (err, result) => {
-          console.log(result.data.rows)
-          var analData = result.data.rows
-          var string = analData.toString()
-          console.log(string)
-          var poop = string.search("Poopin’ In Pupin")
-          console.log(poop)
-          if (poop == -1 && currentlyPooping == 0) {
-            currentlyPooping = 0;
-          } else if (poop == -1 && currentlyPooping == 1) {
-            currentlyPooping = 0;
-            bot.postMessageToChannel('overseen_overheard', "_Someone has finished using Bwog to figure out where to poop_", params)
-            console.log("Someone is done using Bwog to figure out where to poop")
-          } else if (poop >= 0 && currentlyPooping == 0) {
-            currentlyPooping = 1;
-            bot.postMessageToChannel('overseen_overheard', "_Someone is currently using Bwog to figure out where to poop_", params)
-            console.log("Someone is using Bwog to figure out where to poop")
-          }
+        jwt.authorize((err, response) => {
+          google.analytics('v3').data.realtime.get(
+            {
+              auth: jwt,
+              ids: 'ga:' + view_id,
+              metrics: 'rt:activeUsers',
+              dimensions: 'rt:pageTitle'
+
+            },
+            (err, result) => {
+              result = result.data.rows.toString()
+              var cleanresult = result += ",";
+              cleanresult = result.replace(/Bwog » /g,"\n").replace(/,1,/g,' (1)').replace(/,2,/g,' (2)').replace(/,3,/g,' (3)').replace(/,4,/g,' (4)')
+              messagetext = "Beep Boop! Hey "+user_name+" , the pages currently being viewed are\n"+cleanresult;
+              bot.postMessageToUser(username, messagetext, params);
+              return;
+
+            })
+            }
+          )
         }
-
-      )
-    })
-
-};
-
-var interval = setInterval(function () { poopAlert(); }, 5000);
+      });
